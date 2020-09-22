@@ -41,5 +41,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Porque eu preciso usar o seu faceid para autenticação?</string>
 </dict>
 </plist>

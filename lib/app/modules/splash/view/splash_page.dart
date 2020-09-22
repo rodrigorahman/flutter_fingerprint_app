@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fingerprint_app/app/modules/splash/controller/splash_controller.dart';
+import 'package:flutter_fingerprint_app/app/shared/auth/biometrics_login.dart';
+import 'package:flutter_fingerprint_app/app/shared/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatelessWidget {
   final SplashController _splashController;
@@ -15,10 +18,21 @@ class SplashPage extends StatelessWidget {
       ),
       body: BlocListener<SplashController, SplashState>(
         cubit: _splashController..checkLogged(),
-        listener: (context, state) {
+        listener: (context, state) async {
           switch (state.runtimeType) {
             case SplashUserLogged:
-              Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+              SharedPreferences sp = await SharedPreferences.getInstance();
+              if(sp.containsKey(BIOMETRICS_KEY) && sp.getBool(BIOMETRICS_KEY)){
+                final biometricsAuth = await BiometricsLogin().auth();
+                if(!biometricsAuth){
+                  sp.clear();
+                  Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);    
+                }else{
+                  Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);  
+                }
+              }else{
+                Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+              }
               break;
             case SplashUserUnlogged:
               Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);

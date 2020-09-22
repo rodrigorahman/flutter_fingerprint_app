@@ -1,6 +1,5 @@
 {
     "workbench.colorTheme": "Webstorm IntelliJ Darcula Theme",
     "editor.fontWeight": "normal",
-    "window.zoomLevel": 2,
-    "customPresentationMode.backup": {}
+    "window.zoomLevel": 0
 }
